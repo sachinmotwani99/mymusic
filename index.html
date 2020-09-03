@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player</title>
+    <style id="lightCss" media="">
+    @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+    /* font-family: 'Roboto', sans-serif; */
+    @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+    /* font-family: 'Rubik', sans-serif; */
+
+    *{
+        padding: 0;
+        margin: 0;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        box-sizing: border-box;
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+    }
+
+    body{
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    ::-webkit-scrollbar {  /* Remove scrollbar space */
+        width: 0px;
+        background: transparent;
+    }
+
+    @font-face {
+        font-family: HelveticaNormal;
+        src: url("https://res.cloudinary.com/dp1xkuswt/raw/upload/v1597987314/Helvetica_uld9sz.ttf");
+    }
+
+    a{
+        text-decoration: none;
+    }
+
+    a:hover{
+        text-decoration: none;
+    }
+
+    input:focus, textarea:focus, select:focus{
+        outline: none;
+    }
+
+    .flex{
+        display: flex;
+    }
+
+    .hidden{
+        display: none;
+    }
+
+    .invisible{
+        transition: 1s;
+        opacity: 0 !important;
+    }
+
+    img{
+        object-fit: cover;
+    }
+
+    .z-1{
+        display: inline-block;
+        transform: rotate(90deg);
+        margin-left: 4px;
+        margin-right: 4px;
+        font-size: 30px;
+        padding-bottom: 4px;
+    }
+
+    .sd{
+        overflow: hidden !important;
+    }
+
+    .blur{
+        transition: all 0.2s ease;
+    }
+
+    .blur-in{
+        opacity: 0;
+    }
+
+    .blur-out{
+        opacity: 1;
+    }
+
+    /* Menu */
+
+    .menu{
+        /* background: #4fb9e1; */
+        background: white;
+        /* color: white; */
+        color: #3f444f;
+        height: 80px;
+        font-family: 'Rubik', sans-serif;
+        font-size: 20px;
+        z-index: -2;
+    }
+
+    .menu-item-1{
+        /* z-index: 10; */
+        /* position: relative; */
+        height: 40px;
+        line-height: 50px;
+        padding-top: 2px;
+        width: 60px;
+        text-align: center;
+    }
+
+    .menu-item-2{
+        height: 40px;
+        line-height: 50px;
+        flex-grow: 1;
+        text-align: center;
+        font-size: 16px;
+        margin-right: 60px;
+    }
+
+    .menu-item-3{
+        height: 40px;
+        line-height: 50px;
+        padding-top: 2px;
+        width: 60px;
+        text-align: center;
+    }
+
+    .menu-icon{
+        font-size: 22px;
+    }
+
+    .menu-icon-2{
+        font-size: 22px;
+    }
+
+    /* Home Screen */
+
+    .home-screen{
+        margin-top: -30px;
+        height: calc(100vh - 50px);
+        background: white;
+        overflow: hidden;
+        overflow-y: scroll !important;
+    }
+
+    .home-heading-1{
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        font-size: 30px;
+        color: #363c46;
+        margin-left: 20px;
+        font-weight: 600;
+    }
+
+    .home-heading-2{
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        color: #363c46;
+        margin-left: 20px;
+        font-weight: 600;
+        margin-top: 32px;
+    }
+
+    /* Popular this week */
+
+    .h-SCROLL{
+        width: 100%;
+        overflow-x: scroll;
+        margin-top: 12px;
+    }
+
+    .home-card-1{
+        position: relative;
+        margin-left: 20px;
+        background: linear-gradient(45deg, #ffb791, #ff6a82);
+        /* width: 80%; */
+        border-radius: 20px;
+        margin-top: 10px;
+        margin-bottom: 32px;
+        box-shadow: 0px 4px 11px #ffdbdb;
+        transition: 0.2s;
+    }
+
+    .home-card-1:active{
+        transition: 0.1s;
+        transform: scale(1.01);
+        opacity: 0.8;
+    }
+
+    .home-card-2{
+        position: relative;
+        margin-left: 20px;
+        background: linear-gradient(45deg, #1c97c5, #39baeb);
+        /* width: 80%; */
+        border-radius: 20px;
+        margin-top: 10px;
+        margin-bottom: 32px;
+        box-shadow: 0px 4px 11px #bdedff;
+        transition: 0.2s;
+    }
+
+    .home-card-2:active{
+        transition: 0.1s;
+        transform: scale(1.01);
+        opacity: 0.8;
+    }
+
+    .home-c--1{
+        margin-top: 20px;
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+
+    .home-c-1-img{
+        height: 90px;
+        width: 90px;
+        border: 4px solid rgb(150 226 255 / 28%);
+        border-radius: 20px;
+    }
+
+    .home-c-2{
+        flex-direction: column;
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        flex-grow: 1;
+        margin-left: 10px;
+        width: calc(60px + 100px);
+    }
+
+    .home-c-2-1{
+        font-size: 16px;
+    }
+
+    .home-c-2-2{
+        font-size: 12px;
+        color: rgb(255 255 255 / 90%);
+        margin-top: 4px;
+    }
+
+    .home-c-2-3{
+        color: rgb(255 255 255 / 0.80);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+    .home-c-3{
+        color: white;
+        margin-right: 20px;
+        padding-top: 10px;
+    }
+
+    .home-c--2{
+        margin-left: 20px;
+        margin-right: 20px;
+        color: white;
+        font-family: 'Roboto', sans-serif;
+        background: rgb(255 255 255 / 20%);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .home-c-2--stats-c{
+        align-items: center;
+        flex: 1;
+        flex-direction: column;
+    }
+
+    .home-c-2-s-I-c{
+        font-size: 16px;
+    }
+
+    .home-c-2-S-VAL{
+        margin-top: 4px;
+        font-size: 11px;
+    }
+
+    .h-c-1-PLUS-1{
+        max-width: 20px;
+        min-width: 20px;
+        margin-left: 0px;
+        opacity: 0;
+    }
+
+    /* Made for you */
+
+    .home-heading-3{
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        color: #363c46;
+        margin-left: 20px;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .section-3{
+        width: 100%;
+        overflow: hidden;
+        overflow-x: scroll;
+    }
+
+    .sec-3-box{
+        position: relative;
+        flex-direction: column;
+        margin-left: 20px;
+        font-family: 'Roboto', sans-serif;
+        /* background: linear-gradient(135deg, #e5f8ff, #ffffff); */
+        border-radius: 20px;
+        padding-top: 6px;
+        padding-right: 6px;
+        padding-left: 6px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        /* box-shadow: 5px 5px 8px 0px #edfaff; */
+        transition: 0.2s;
+    }
+
+    .sec-3-box:active{
+        transition: 0.1s;
+        opacity: 0.4;
+    }
+
+    .section-3-image{
+        height: 120px;
+        width: 120px;
+        border-radius: 20px;
+    }
+
+    .sec-3--2{
+        flex-direction: column;
+        text-align: center;
+        margin-top: 4px;
+        margin-bottom: 2px;
+    }
+
+    .sec-3-b-1{
+        font-size: 12px;
+        font-family: 'Rubik', sans-serif;
+        font-weight: 600;
+        color: #384554;
+    }
+
+    .sec-3-b-2{
+        font-size: 10px;
+        font-family: 'Rubik', sans-serif;
+        color: #62768e;
+    }
+
+    .sec-4-box{
+        position: relative;
+        flex-direction: column;
+        margin-left: 20px;
+        font-family: 'Roboto', sans-serif;
+        /* background: linear-gradient(135deg, #ffeee7, #ffffff); */
+        border-radius: 20px;
+        padding-top: 6px;
+        padding-right: 6px;
+        padding-left: 6px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        /* box-shadow: 5px 5px 8px 0px #ffeee6; */
+        transition: 0.2s;
+    }
+
+    .sec-4-box:active{
+        transition: 0.1s;
+        opacity: 0.4;
+    }
+
+    .sec-5-box{
+        position: relative;
+        flex-direction: column;
+        margin-left: 20px;
+        font-family: 'Roboto', sans-serif;
+        border-radius: 20px;
+        padding-top: 6px;
+        padding-right: 6px;
+        padding-left: 6px;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        transition: 0.2s;
+    }
+
+    .sec-5-box:active{
+        transition: 0.1s;
+        opacity: 0.4;
+    }
+
+    .section-4-image{
+        height: 90px;
+        width: 90px;
+        border: 2px solid #f1fbff;
+        border-radius: 100px;
+    }
+
+    .s-ml-0{
+        margin-left: 0px;
+    }
+
+    /* Side Menu */
+
+    .side-menu{
+        top: 0px;
+        left: -100%;
+        position: fixed;
+        height: 100vh;
+        width: 100%;
+        background: rgb(139 128 249 / 1);
+        transition: 1s;
+        opacity: 0.2;
+    }
+
+    .side-container{
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 40px);
+        margin: auto;
+    }
+
+    .side-c-1{
+        color: white;
+        font-size: 24px;
+        margin-top: 20px;
+    }
+
+    .mt-40{
+        margin-top: 40px !important;
+    }
+
+    .side-c-2{
+        font-family: 'Roboto', sans-serif;
+        color: white;
+        font-size: 16px;
+        margin-top: 10px;
+        background: rgb(125 73 255 / 0.80);
+        padding: 12px;
+        padding-left: 32px;
+        padding-right: 32px;
+        border-radius: 4px;
+    }
+
+    .side-L-icon{
+        font-size: 20px;
+        margin-left: 10px;
+        margin-bottom: -4px;
+    }
+
+    .side-copy{
+        font-family: 'Roboto', sans-serif;
+        color: #ffffff;
+        margin-left: 20px;
+        margin-top: calc(100vh - 380px);
+    }
+
+    /* Music Screen */
+
+    .tob-white{
+        transition: 0s;
+        color: white !important;
+    }
+
+    .top-to-bottom {
+        position: relative;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        -webkit-transition: color 1000ms;
+        transition: color 1000ms;
+        z-index: 0;
+    }
+
+    .top-to-bottom:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #4fb9e1;
+        -webkit-transform: scaleY(0);
+        transform: scaleY(0);
+        -webkit-transform-origin: 50% 0%;
+        transform-origin: 50% 0%;
+        -webkit-transition-property: transform;
+        transition-property: transform;
+        -webkit-transition: 300ms ease-out;
+        transition: 0.6s ease-out;
+    }
+
+    .top-to-bottom-2:before {
+        -webkit-transform: scaleY(1);
+        transform: scaleY(1);
+    }
+
+    .music-screen{
+        top: 1800px;
+        opacity: 0.2;
+        position: fixed;
+        left: 0px;
+        height: calc(100vh - 50px);
+        width: 100%;
+        background: white;
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+    }
+
+    /* Music Player Screen */
+
+    .music-disk-con{
+        height: 200px;
+        width: 200px;
+        margin: auto;
+        margin-top: 60px;
+        border-radius: 200px;
+        background: url("https://s.yimg.com/ny/api/res/1.2/mI4rBxEF5Z0kiLUURrH3VQ--~A/YXBwaWQ9aGlnaGxhbmRlcjtzbT0xO3c9ODAw/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2020-01/c8fff8c0-3d09-11ea-b7ff-0f2094a2854d");
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+        box-shadow: 5px 5px 8px 0px #ffeee6;
+    }
+
+    .music-h-1{
+        text-align: center;
+        margin-top: 20px;
+        font-family: HelveticaNormal;
+        font-size: 22px;
+        font-weight: 600;
+        color: #313742;
+    }
+
+    .music-h-2{
+        text-align: center;
+        margin-top: 6px;
+        font-family: 'Rubik', sans-serif;
+        font-size: 14px;
+        color: #797b80;
+    }
+
+    .btn-container{
+        width: 100%;
+        text-align: center;
+        font-size: 40px;
+        margin-top: 40px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .f-32{
+        font-size: 26px;
+        color: #343a45;
+    }
+
+    .btn-2-box{
+        padding: 8px;
+        transition: 0.1s;
+    }
+
+    .btn-2-box:active{
+        transition: 0.1s;
+        opacity: 0.4;
+    }
+
+    .b-2-b-MID{
+        color: #4fb9e1;
+        filter: drop-shadow( 4px 8px 8px rgba(183, 218, 232, 0.6));
+        margin-left: 32px;
+        margin-right: 32px;
+
+    }
+
+    .bottom-btn{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .bottom-btn-content{
+        color: #84a4d6;
+        font-size: 20px;
+        margin-left: 20px;
+        margin-right: 20px;
+        width: 33%;
+        text-align: center;
+        transition: 0.1s;
+    }
+
+    .bottom-btn-content:active{
+        transition: 0.1s;
+        opacity: 0.2;
+    }
+
+    .b-b-c-MID{
+        font-size: 26px;
+        color: #FF8C61;
+        filter: drop-shadow( 4px 4px 10px rgba(255, 140, 97, 0.6));
+    }
+
+    .inBack-container{
+        opacity: 0;
+    }
+
+    .check-bottom-opt{
+        color: #1c4d99;
+    }
+
+    .bottom-btn {
+        display: none;
+    }
+
+    /* Splash Screen */
+
+    .splash-screen{
+        overflow: hidden;
+        height: 100vh;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: white;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        transition: all 1s ease;
+    }
+
+    .s-s-con-1{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .splash-ss-item-1{
+        font-size: 28px;
+        color: #363c46;
+        margin-top: 6px;
+    }
+
+    .z-2{
+        display: inline-block;
+        transform: rotate(0deg);
+        margin-left: 4px;
+        margin-right: 4px;
+        font-size: 30px;
+        padding-bottom: 4px;
+    }
+
+    #zTwo{
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 11s ease;
+        -o-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+    /* Some Extra Styling */
+
+    #myAudio {
+        opacity: 0;
+    }
+
+    #songName2{
+        color: white !important;
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 11s ease;
+        -o-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+
+    @media screen and (min-height: 480px) {
+        .bottom-btn {
+            display: flex;
+        }
+    }
+    </style>
+    <!-- Same stylesheet with darker colors -->
+    <style id="darkCss" media="max-width=1px">
+    @import url(https://fonts.googleapis.com/css2?family=Roboto&display=swap);@import url(https://fonts.googleapis.com/css2?family=Rubik&display=swap);*{padding:0;margin:0;-webkit-tap-highlight-color:transparent;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}body{background:#0e0f1b;overflow:hidden;padding:0;margin:0;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}::-webkit-scrollbar{width:0;background:0 0}@font-face{font-family:HelveticaNormal;src:url(https://res.cloudinary.com/dp1xkuswt/raw/upload/v1597987314/Helvetica_uld9sz.ttf)}a{text-decoration:none}a:hover{text-decoration:none}input:focus,select:focus,textarea:focus{outline:0}.flex{display:flex}.hidden{display:none}.invisible{opacity:0}img{object-fit:cover;filter: saturate(0.5);}.z-1{display:inline-block;transform:rotate(90deg);margin-left:4px;margin-right:4px;font-size:30px;padding-bottom:4px}.sd{overflow:hidden!important}.blur{transition:all .8s ease}.blur-in{opacity:0}.blur-out{opacity:1;}.menu{background:#0e0f1b;color:#3f444f;height:80px;font-family:Rubik,sans-serif;font-size:20px;z-index:-2}.menu-item-1{height:40px;line-height:50px;padding-top:2px;width:60px;text-align:center;color:#a2ace1}.menu-item-2{height:40px;line-height:50px;flex-grow:1;text-align:center;font-size:16px;margin-right:60px;color:#959fd6;}.menu-item-3{height:40px;line-height:50px;padding-top:2px;width:60px;text-align:center}.menu-icon{font-size:22px}.menu-icon-2{font-size:22px}.home-screen{margin-top:-30px;height:calc(100vh - 50px);background:#0e0f1b;overflow:hidden;overflow-y:scroll!important}.home-heading-1{position:relative;font-family:Roboto,sans-serif;font-size:30px;color:#cccddd;margin-left:20px;font-weight:500}.home-heading-2{font-family:Roboto,sans-serif;font-size:16px;color:#8186c6;margin-left:20px;font-weight:600;margin-top:32px}.h-SCROLL{width:100%;overflow-x:scroll;margin-top:12px}.home-card-1{position:relative;margin-left:20px;background:linear-gradient(45deg,#191b30,#131425);border-radius:20px;margin-top:10px;margin-bottom:32px;box-shadow:0 4px 11px #020204;transition:.2s}.home-card-1:active{transition:.1s;transform:scale(1.01);opacity:.8}.home-card-2{position:relative;margin-left:20px;background:linear-gradient(45deg,#151729,#0a0d21);border-radius:20px;margin-top:10px;margin-bottom:32px;box-shadow:0 4px 11px #020204;transition:.2s}.home-card-2:active{transition:.1s;transform:scale(1.01);opacity:.8}.home-c--1{margin-top:20px;margin-left:20px;margin-bottom:20px}.home-c-1-img{height:90px;width:90px;border:4px solid rgb(150 226 255 / 28%);border-radius:20px}.home-c-2{flex-direction:column;color:#fff;font-family:Roboto,sans-serif;flex-grow:1;margin-left:10px;width:calc(60px + 100px)}.home-c-2-1{font-size:16px}.home-c-2-2{font-size:12px;color:rgb(255 255 255 / 90%);margin-top:4px}.home-c-2-3{color:rgb(255 255 255 / .8);font-size:11px;margin-top:4px}.home-c-3{color:#fff;margin-right:20px;padding-top:10px}.home-c--2{margin-left:20px;margin-right:20px;color:#fff;font-family:Roboto,sans-serif;background:rgb(14 15 27 / 0.6);border-top-left-radius:20px;border-top-right-radius:20px;padding-top:10px;padding-bottom:10px}.home-c-2--stats-c{align-items:center;flex:1;flex-direction:column}.home-c-2-s-I-c{font-size:16px}.home-c-2-S-VAL{margin-top:4px;font-size:11px}.h-c-1-PLUS-1{max-width:20px;min-width:20px;margin-left:0;opacity:0}.home-heading-3{font-family:Roboto,sans-serif;font-size:16px;color:#8186c6;margin-left:20px;margin-bottom:20px;font-weight:600}.section-3{width:100%;overflow:hidden;overflow-x:scroll}.sec-3-box{position:relative;flex-direction:column;margin-left:20px;font-family:Roboto,sans-serif;border-radius:20px;padding-top:6px;padding-right:6px;padding-left:6px;padding-bottom:10px;margin-bottom:20px;transition:.2s}.sec-3-box:active{transition:.1s;opacity:.4}.section-3-image{height:120px;width:120px;border-radius:20px}.sec-3--2{flex-direction:column;text-align:center;margin-top:4px;margin-bottom:2px}.sec-3-b-1{font-size:12px;font-family:Rubik,sans-serif;font-weight:600;color:#ededee}.sec-3-b-2{font-size:10px;font-family:Rubik,sans-serif;color:#8183a1}.sec-4-box{position:relative;flex-direction:column;margin-left:20px;font-family:Roboto,sans-serif;border-radius:20px;padding-top:6px;padding-right:6px;padding-left:6px;padding-bottom:10px;margin-bottom:20px;transition:.2s}.sec-4-box:active{transition:.1s;opacity:.4}.sec-5-box{position:relative;flex-direction:column;margin-left:20px;font-family:Roboto,sans-serif;border-radius:20px;padding-top:6px;padding-right:6px;padding-left:6px;padding-bottom:10px;margin-bottom:20px;transition:.2s}.sec-5-box:active{transition:.1s;opacity:.4}.section-4-image{height:90px;width:90px;border:2px solid #4a4d7c;border-radius:100px}.s-ml-0{margin-left:0}.side-menu{top:0;left:-100%;position:fixed;height:100vh;width:100%;background:rgb(23 26 48 / 1);transition:1s;opacity:.2}.side-container{display:flex;flex-direction:column;width:calc(100% - 40px);margin:auto}.side-c-1{color:#fff;font-size:24px;margin-top:20px}.mt-40{margin-top:40px!important}.side-c-2{font-family:Roboto,sans-serif;color:#fff;font-size:16px;margin-top:10px;background:rgb(16 18 33);padding:12px;padding-left:32px;padding-right:32px;border-radius:4px}.side-L-icon{font-size:20px;margin-left:10px;margin-bottom:-4px}.side-copy{font-family:Roboto,sans-serif;color:#fff;margin-left:20px;margin-top:calc(100vh - 380px)}.tob-white{transition:0s;color:#0e0f1b!important}.top-to-bottom{position:relative;-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-transition:color 1s;transition:color 1s;z-index:0}.top-to-bottom:before{content:"";position:absolute;z-index:-1;top:0;left:0;right:0;bottom:0;background:#191d32;-webkit-transform:scaleY(0);transform:scaleY(0);-webkit-transform-origin:50% 0;transform-origin:50% 0;-webkit-transition-property:transform;transition-property:transform;-webkit-transition:.3s ease-out;transition:.6s ease-out}.top-to-bottom-2:before{-webkit-transform:scaleY(1);transform:scaleY(1)}.music-screen{top:1800px;opacity:.2;position:fixed;left:0;height:calc(100vh - 50px);width:100%;background:#101327;border-top-left-radius:30px;border-top-right-radius:30px}.music-disk-con{height:200px;width:200px;margin:auto;margin-top:60px;border-radius:200px;background:url(https://s.yimg.com/ny/api/res/1.2/mI4rBxEF5Z0kiLUURrH3VQ--~A/YXBwaWQ9aGlnaGxhbmRlcjtzbT0xO3c9ODAw/https://media-mbst-pub-ue1.s3.amazonaws.com/creatr-uploaded-images/2020-01/c8fff8c0-3d09-11ea-b7ff-0f2094a2854d);background-position:center!important;background-repeat:no-repeat!important;background-size:cover!important;box-shadow:5px 5px 8px 0 #0b0d1b}.music-h-1{text-align:center;margin-top:20px;font-family:HelveticaNormal;font-size:22px;font-weight:600;color:#f2f3fc}.music-h-2{text-align:center;margin-top:6px;font-family:Rubik,sans-serif;font-size:14px;color:#797b80}.btn-container{width:100%;text-align:center;font-size:40px;margin-top:40px;align-items:center;justify-content:center}.f-32{font-size:26px;color:#8a94a6}.btn-2-box{padding:8px;transition:.1s}.btn-2-box:active{transition:.1s;opacity:.4}.b-2-b-MID{color:#45afd6;filter:drop-shadow( 4px 8px 8px rgba(183, 218, 232, .2));margin-left:32px;margin-right:32px}.bottom-btn{position:absolute;bottom:0;width:100%;align-items:center;justify-content:center;padding:10px}.bottom-btn-content{color:#84a4d6;font-size:20px;margin-left:20px;margin-right:20px;width:33%;text-align:center;transition:.1s}.bottom-btn-content:active{transition:.1s;opacity:.2}.b-b-c-MID{font-size:26px;color:#ff8c61;filter:drop-shadow( 4px 4px 10px rgba(255, 140, 97, .6))}.inBack-container{opacity:0}.check-bottom-opt{color:#fff}.bottom-btn{display:none}.splash-screen{overflow:hidden;height:100vh;width:100%;position:fixed;top:0;left:0;background:#fff;display:flex;align-items:center;text-align:center;transition:all 1s ease}.s-s-con-1{display:flex;width:100%;justify-content:center;align-items:center}.splash-ss-item-1{font-size:28px;color:#363c46;margin-top:6px}.z-2{display:inline-block;transform:rotate(0);margin-left:4px;margin-right:4px;font-size:30px;padding-bottom:4px}#zTwo{-webkit-transition:all 1s ease;-moz-transition:all 11s ease;-o-transition:all 1s ease;transition:all 1s ease}@media screen and (min-height:480px){.bottom-btn{display:flex}}
+    </style>
+    <!-- Overwriting styles bcuz of laziness -_- -->
+    <style>
+        .home-heading-2{
+            font-weight: 500;
+        }
+        .home-heading-3{
+            font-weight: 500;
+        }
+    </style>
+    
+</head>
+<body>
+
+    <!-- Menu -->
+    <div id="menu" class="menu top-to-bottom blur">
+        <div class="flex menu-c">
+            <div id="showSideMenu" class="menu-item-1">
+                <ion-icon name="menu" class="menu-icon"></ion-icon>
+            </div>
+            <div id="goBackToHome" class="menu-item-1 hidden">
+                <ion-icon name="arrow-back" class="menu-icon"></ion-icon>
+            </div>
+            <div id="songName2" class="menu-item-2 invisible">
+                Song
+            </div>
+            <!-- <div class="menu-item-3">
+                <ion-icon name="sunny" class="menu-icon-2"></ion-icon>
+            </div> -->
+        </div>
+    </div>
+
+    <!-- Home Screen -->
+    <div id="homeScreen" class="home-screen blur">
+        <div class="home-heading-1">
+            SACHIN's MUSIC
+        </div>
+
+        <div class="home-heading-2">
+            Best Mixtapes
+        </div>
+
+        <div id="hideOnMusic" class="flex h-SCROLL">
+
+            <div class="home-card-1" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599114219/songs/cheif%20page/size_m_1516001851_jmk9eb.jpg', songName: 'Dua-Saware', songArtist: 'TSeries', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599114239/songs/cheif%20page/Dua_Saware_T-Series_Mixtape_l_Neeti_Mohan_Salim_Merchant_l_Bhushan_Kumar_l_Ahmed_Khan_l_Abhijit_dwkk1p.mp3'});">
+                <div class="flex home-c--1">
+                    <div class="home-c-1">
+                        <img class="home-c-1-img" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599114219/songs/cheif%20page/size_m_1516001851_jmk9eb.jpg">
+                    </div>
+                    <div class="flex home-c-2">
+                        <div class="home-c-2-1">
+                            Dua-Saware
+                        </div>
+                        <div class="home-c-2-2">
+                            Tseries
+                        </div>
+                        <div class="home-c-2-3">
+                            1:29
+                        </div>
+                    </div>
+                    <div class="home-c-3">
+                        <ion-icon name="play" class="home-c-3-1"></ion-icon>
+                    </div>
+                </div>
+                <div class="flex home-c--2">
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="play" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            18M
+                        </div>
+                    </div>
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="heart" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            564K
+                        </div>
+                    </div>
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="download" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            12.2K
+                        </div>
+                    </div>
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="arrow-redo" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            16K
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-card-2" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599114219/songs/cheif%20page/size_m_1516087208_omcv6d.jpg', songName: 'Layi vi na gai - Saade Naal', songArtist: 'Tseries', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599114236/songs/cheif%20page/Layi_Vi_Na_GayiSadde_Naal_Yaariyan_Video_T-Series_Mixtape_Punjabi_Jashan_Singh_Shipra_G_bejl0a.mp3'});">
+                <div class="flex home-c--1">
+                    <div class="home-c-1">
+                        <img class="home-c-1-img" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599114219/songs/cheif%20page/size_m_1516087208_omcv6d.jpg">
+                    </div>
+                    <div class="flex home-c-2">
+                        <div class="home-c-2-1">
+                            Layi vi na gai - Saade Naal
+                        </div>
+                        <div class="home-c-2-2">
+                            TSeries
+                        </div>
+                        <div class="home-c-2-3">
+                            4:06
+                        </div>
+                    </div>
+                    <div class="home-c-3">
+                        <ion-icon name="play" class="home-c-3-1"></ion-icon>
+                    </div>
+                </div>
+                <div class="flex home-c--2">
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="play" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            42M
+                        </div>
+                    </div>
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="heart" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            812K
+                        </div>
+                    </div>
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="download" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            42K
+                        </div>
+                    </div>
+                    <div class="flex home-c-2--stats-c">
+                        <div class="home-c-2-s-I-c">
+                            <ion-icon name="arrow-redo" class="home-c--2-ICON"></ion-icon>
+                        </div>
+                        <div class="home-c-2-S-VAL">
+                            28K
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-card-1 h-c-1-PLUS-1">
+                ..
+            </div>
+        </div>
+
+<!-- Made for you -->
+
+        <div class="home-heading-3">
+            Hindi Party Songs
+        </div>
+
+        <div class="flex section-3">
+
+            <div class="flex sec-3-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_1_zew0pd.jpg', songName: 'Balam Pichkari', songArtist: 'Yeh Jawani Hai Deewani', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599066479/songs/hindi%20party%20songs/Balam_Pichkari_Full_Song_Video_Yeh_Jawaani_Hai_Deewani_Ranbir_Kapoor_Deepika_Padukone_cgjmrl.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_1_zew0pd.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Balam Pichkari
+                    </div>
+                    <div class="sec-3-b-2">
+                        Yeh Jawani Hai Deewani
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="flex sec-3-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113296/songs/hindi%20party%20songs/size_m_1514654660_dtrwij.jpg', songName: 'Dil Chori', songArtist: 'Sonu Ki Titu ki Sweety', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599066469/songs/hindi%20party%20songs/Yo_Yo_Honey_Singh_DIL_CHORI_Video_Simar_Kaur_Ishers_Hans_Raj_Hans_Sonu_Ke_Titu_Ki_Sweety_ovzmow.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113296/songs/hindi%20party%20songs/size_m_1514654660_dtrwij.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Dil Chori
+                    </div>
+                    <div class="sec-3-b-2">
+                        Sonu Ki Titu ki Sweety
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERROR -->
+            <div class="flex sec-3-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_2_qq4tjp.jpg', songName: 'Chittiyan Kalaiyan', songArtist: 'Roy', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599066467/songs/hindi%20party%20songs/Chittiyaan_Kalaiyaan_FULL_VIDEO_SONG_Roy_Meet_Bros_Anjjan_Kanika_Kapoor_T-SERIES_ibzfpu.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_2_qq4tjp.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Chittiyan Kalaiyan
+                    </div>
+                    <div class="sec-3-b-2">
+                        Roy
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-3-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_4_b6gp0w.jpg', songName: 'Abhi Toh Party Shuru Hui Hai', songArtist: 'Khubsurat', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599066468/songs/hindi%20party%20songs/Abhi_Toh_Party_Shuru_Hui_Hai_FULL_VIDEO_Song_Khoobsurat_Badshah_Aastha_ztci3n.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_4_b6gp0w.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Abhi Toh Party Shuru Hui Hai
+                    </div>
+                    <div class="sec-3-b-2">
+                        Khubsurat
+                    </div>
+                </div>
+            </div>
+
+            <!-- ERROR -->
+            <div class="flex sec-3-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113295/songs/hindi%20party%20songs/crop_175x175_1537965014_fij6mb.jpg', songName: 'Moorni Banke', songArtist: 'Badhai Ho', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599066462/songs/hindi%20party%20songs/Guru_Randhawa_Morni_Banke_Video_Badhaai_Ho_Tanishk_Bagchi_Neha_Kakkar_Ayushmann_K_Sany_rszgky.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113295/songs/hindi%20party%20songs/crop_175x175_1537965014_fij6mb.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Moorni Banke
+                    </div>
+                    <div class="sec-3-b-2">
+                        Badhai Ho
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-3-box h-c-1-PLUS-1">
+            </div>
+
+        </div>
+
+<!-- English Songs -->
+
+        <div class="home-heading-3">
+            Hindi Feel Good Songs
+        </div>
+
+        <div class="flex section-3">
+
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112611/songs/hindi%20feel%20good%20songs/crop_175x175_49986_wbgcl0.jpg', songName: 'Kun Faya Kun', songArtist: 'Rockstar', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599108220/songs/hindi%20feel%20good%20songs/Lyrical_Kun_Faya_Kun_Video_Song_Rockstar_Ranbir_Kapoor_A.R._Rahman_allnmt.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112611/songs/hindi%20feel%20good%20songs/crop_175x175_49986_wbgcl0.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Kun Faya Kun
+                    </div>
+                    <div class="sec-3-b-2">
+                        Rockstar
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112610/songs/hindi%20feel%20good%20songs/size_m_t37pxn.jpg', songName: 'Soch Na Sake', songArtist: 'Airlift', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599026007/songs/01_Soch_Na_Sake_-_Airlift_SongsMp3.Com_tgqcvh.mp33'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112610/songs/hindi%20feel%20good%20songs/size_m_t37pxn.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Soch Na Sake
+                    </div>
+                    <div class="sec-3-b-2">
+                        Airlift
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112611/songs/hindi%20feel%20good%20songs/crop_175x175_238029_t7yw8p.jpg', songName: 'Mitti Di Khushbo', songArtist: 'Ayushman Khurana', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599060239/songs/OFFICIAL_Mitti_Di_Khushboo_FULL_VIDEO_SongAyushmann_KhurranaRochak_Kohli_k5pmwa.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112611/songs/hindi%20feel%20good%20songs/crop_175x175_238029_t7yw8p.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Mitti Di Khushbo
+                    </div>
+                    <div class="sec-3-b-2">
+                        Ayushman Khurana
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112611/songs/hindi%20feel%20good%20songs/size_m_1554479538_wo8ihi.jpg', songName: 'Vaaste', songArtist: 'Dhwani Bhanushali', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599025946/songs/Vaaste_-_Dhvani_Bhanushali_SongsMp3.Com_fm2luo.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112611/songs/hindi%20feel%20good%20songs/size_m_1554479538_wo8ihi.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Vaaste
+                    </div>
+                    <div class="sec-3-b-2">
+                        Dhwani Bhanushali
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112610/songs/hindi%20feel%20good%20songs/size_m_1530871429_hu5dhm.jpg', songName: 'Naino Ne Bandhi Kaisi Dor Re', songArtist: 'Gold', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599060316/songs/Naino_Ne_Baandhi_By_Aakanksha_Sharma_-_Full_Audio_-_Gold_-_Akshay_Kumar_-_Mouni_Roy_n1xos8.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599112610/songs/hindi%20feel%20good%20songs/size_m_1530871429_hu5dhm.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Naino Ne Bandhi Kaisi Dor Re
+                    </div>
+                    <div class="sec-3-b-2">
+                        Gold
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-3-box h-c-1-PLUS-1">
+            </div>
+
+        </div>
+
+        
+
+        <div class="flex section-3">
+
+            
+
+
+            <div class="flex sec-3-box h-c-1-PLUS-1 s-ml-0">
+            </div>
+
+        </div>
+
+        <div class="home-heading-3">
+            Punjabi Feel Good songs
+        </div>
+
+        <div class="flex section-3">
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599111843/songs/punjabi%20feel%20good/qismat-et00071703-28-02-2018-12-45-31_bvrlyv.jpg', songName: 'Qismat', songArtist: 'Qismat', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599060278/songs/Qismat_Full_Video_Ammy_Virk_Sargun_Mehta_Jaani_B_Praak_Arvindr_Khaira_Punjabi_Song_kbvsfe.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599111843/songs/punjabi%20feel%20good/qismat-et00071703-28-02-2018-12-45-31_bvrlyv.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Qismat
+                    </div>
+                    <div class="sec-3-b-2">
+                        Qismat
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599111844/songs/punjabi%20feel%20good/images_1_aqsez7.jpg', songName: 'Filhaal', songArtist: 'Good Newz', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1598976418/songs/Filhall_-_Songs.pk_-_320Kbps_stxs1n.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599111844/songs/punjabi%20feel%20good/images_1_aqsez7.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Filhaal
+                    </div>
+                    <div class="sec-3-b-2">
+                        Good Newz
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599111843/songs/punjabi%20feel%20good/crop_175x175_1540031665_2249968_ptmagr.jpg', songName: 'Sakhiyan', songArtist: 'Maninder Butter', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599109838/songs/punjabi%20feel%20good/Maninder_Buttar_SAKHIYAAN_Full_Song_MixSingh_Babbu_New_Punjabi_Songs_2018_Sakhiyan_y7gffi.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599111843/songs/punjabi%20feel%20good/crop_175x175_1540031665_2249968_ptmagr.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Sakhiyan
+                    </div>
+                    <div class="sec-3-b-2">
+                        Maninder Butter
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_3_c2p5lc.jpg', songName: 'Khaab', songArtist: 'Akhil', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599109840/songs/punjabi%20feel%20good/KHAAB_AKHIL_PARMISH_VERMA_NEW_PUNJABI_SONG_2018_CROWN_RECORDS_xoihou.mp33'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113297/songs/hindi%20party%20songs/size_m_3_c2p5lc.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Khaab
+                    </div>
+                    <div class="sec-3-b-2">
+                        Akhil
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-4-box" onclick="playMusic({songImage: 'https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113296/songs/hindi%20party%20songs/size_m_5_yt9zjf.jpg', songName: '', songArtist: 'Millind Gabba', songID: 'https://res.cloudinary.com/dr8bvrnmw/video/upload/v1599109834/songs/punjabi%20feel%20good/Sohnea_Lyrical_Song_Miss_Pooja_Feat._Millind_Gaba_Punjabi_Lyrical_Songs_Speed_Records_pow3k5.mp3'});">
+                <div class="sec-3--1">
+                    <img class="section-3-image" src="https://res.cloudinary.com/dr8bvrnmw/image/upload/v1599113296/songs/hindi%20party%20songs/size_m_5_yt9zjf.jpg">
+                </div>
+                <div class="flex sec-3--2">
+                    <div class="sec-3-b-1">
+                        Sohnea
+                    </div>
+                    <div class="sec-3-b-2">
+                        Millind Gabba
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex sec-3-box h-c-1-PLUS-1">
+            </div>
+
+        </div>
+
+    </div>
+    
+    <!-- Music Screen -->
+    <div id="musicScreen" class="music-screen">
+
+        <div id="musicImage" class="music-disk-con">
+            <div id="btnCircleHandle" class="music-disk-con-2"></div>
+        </div>
+
+        <div id="musicName" class="music-h-1">
+            Gurenge
+        </div>
+
+        <div id="musicArtist" class="music-h-2">
+            LiSA
+        </div>
+
+        <div id="audioHandler1" class="flex btn-container">
+            <div class="btn-2-box f-32">
+                <ion-icon class="btn-2-content-icon" name="play-back"></ion-icon>
+            </div>
+            <div class="btn-2-box b-2-b-MID">
+                <ion-icon id="audioPlay" class="btn-2-content-icon" name="play"></ion-icon>
+                <ion-icon id="audioPause" class="btn-2-content-icon hidden" name="pause"></ion-icon>
+            </div>
+            <div class="btn-2-box f-32">
+                <ion-icon class="btn-2-content-icon" name="play-forward"></ion-icon>
+            </div>
+        </div>
+
+        <div id="audioHandler2" class="flex btn-container">
+            
+            <div class="btn-2-box b-2-b-MID">
+                <ion-icon id="audioPlay2" class="btn-2-content-icon" name="play"></ion-icon>
+                <ion-icon id="audioPause2" class="btn-2-content-icon hidden" name="pause"></ion-icon>
+            </div>
+            
+        </div>
+
+        <div class="flex bottom-btn">
+            <div id="loopStatus" name="loopOff" class="bottom-btn-content">
+                <ion-icon id="audioLoop" name="infinite" class="bottom-btn-s-icon"></ion-icon>
+            </div>
+            <div id="heartStatus" name="hUn" class="bottom-btn-content b-b-c-MID">
+            <ion-icon id="heartUncheck" name="heart-outline" class="bottom-btn-icon"></ion-icon>
+            <ion-icon id="heartCheck" name="heart" class="bottom-btn-icon hidden"></ion-icon>
+            </div>
+            <div id="repeatStatus" name="repeatOff" class="bottom-btn-content">
+                <ion-icon id="audioRepeat" name="repeat" class="bottom-btn-s-icon"></ion-icon>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Side Menu -->
+    <div id="sideMenu" class="side-menu">
+        <div class="side-container">
+
+            <div id="closeSideMenu" class="side-c-1">
+                <ion-icon class="side-c-1-icon" name="arrow-back"></ion-icon>
+            </div>
+/
+            <div id="switchMode" class="side-c-2">
+                <span id="modeStatus" name="light">Light Mode</span> <ion-icon id="lightModeIcon" name="sunny" class="side-L-icon"></ion-icon><ion-icon id="darkModeIcon" name="sunny-outline" class="side-L-icon hidden"></ion-icon>
+            </div>
+        </div>
+
+        <div class="side-copy">
+            &copy; Sachinmotwani99
+        </div>
+    </div>
+
+    <div id="splashScreen" class="splash-screen">
+        <div class="flex s-s-con-1">
+            <!-- <div class="splash-ss-item-1">
+                <ion-icon name="musical-notes"></ion-icon>
+            </div> -->
+            <div>
+                <div class="home-heading-1">
+                    Sachi<span id="zTwo" class="z-2">z</span>'s Music
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioEl">
+        <source id="audioElSource" src="" type="audio/mpeg">
+    </audio>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script>
+        var logger=function(){var o=null,n={enableLogger:function(){null!=o&&(window.console.log=o)},disableLogger:function(){o=console.log,window.console.log=function(){}}};return n}();$(document).ready(function(){logger.disableLogger()});
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@5.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script>
+        var audioEl = document.getElementById("audioEl");
+
+        function showSideMenu() {
+            $("#homeScreen").animate({
+                
+            }, 400).addClass("sd");
+            $("#sideMenu").animate({
+                left: 0,
+                opacity: 1
+            }, 100);
+
+            $("#menu").addClass('blur-in');
+            $("#homeScreen").addClass('blur-in');
+        }
+
+        function hideSideMenu() {
+            $("#homeScreen").animate({
+                
+            }, 400).removeClass("sd");
+            $("#sideMenu").animate({
+                left: 0 - $(document).width(),
+                opacity: 0.2
+            }, 100);
+
+            $("#menu").removeClass('blur-in');
+            $("#homeScreen").removeClass('blur-in');
+        }
+
+        function showHome() {
+
+            $("#homeScreen").animate({ scrollTop: 0 }, 100);
+
+            $("#homeScreen").animate({
+                opacity: 1
+            }, 400).addClass("sd");
+            $("#musicScreen").animate({
+                top: 1800,
+                opacity: 0.2
+            }, 400);
+
+            $("#songName2").addClass("invisible");
+            bottomToTop();
+            
+        }
+
+        function showMusic() {
+
+            $("#homeScreen").animate({ scrollTop: 0 }, 100);
+
+            $("#homeScreen").animate({
+                // opacity: 0.2
+            }, 400).removeClass("sd");
+            $("#musicScreen").animate({
+                top: 50,
+                opacity: 1
+            }, 400);
+
+            topToBottom();
+            hideSideMenu();
+
+        }
+
+        function fadeEffect(el){
+
+            $(el).animate({
+                opacity: 0
+            }, 200).animate({
+                opacity: 1
+            }, 200);
+
+        }
+
+        $("#closeSideMenu").on("click", function(){
+            hideSideMenu();
+        });
+
+        $("#showSideMenu").on("click", function(){
+            showSideMenu();
+        });
+
+        $("#switchMode").on("click", function(){
+            let modeStatus = $("#modeStatus").attr("name");
+
+            if(modeStatus == "light"){
+                $("#lightCss").attr("media", "max-width=1px");
+                $("#darkCss").attr("media", "");
+                $("#modeStatus").attr("name", "dark");
+                $("#modeStatus").text("Dark Mode");
+                $("#lightModeIcon").addClass("hidden");
+                $("#darkModeIcon").removeClass("hidden");
+                // fadeEffect("#switchMode");
+            } else if(modeStatus == "dark"){
+                $("#lightCss").attr("media", "");
+                $("#darkCss").attr("media", "max-width=1px");
+                $("#modeStatus").attr("name", "light");
+                $("#modeStatus").text("Light Mode");
+                $("#darkModeIcon").addClass("hidden");
+                $("#lightModeIcon").removeClass("hidden");
+                // fadeEffect("#switchMode");
+            } else {
+                hideSideMenu();
+            }
+
+            // hideSideMenu();
+
+        });
+
+        $(".closeSM").on("click", function(){
+            hideSideMenu();
+        });
+
+        // Music Player Here
+
+        $("#goBackToHome").on("click", function(){
+            try {
+                showHome();
+                pauseAudio();
+                // $("#hideOnMusic").css(
+                //     "opacity", "1"
+                // );
+                $("#hideOnMusic").removeClass("invisible");
+                if(audioStatus == true){
+                    handleAudio();
+                }
+            } catch (error) {
+                
+            }
+        });
+
+        $(".menu").css("z-index", "0");
+
+        function topToBottom(){
+            $(".menu").addClass("top-to-bottom-2");
+            $(".menu").addClass("tob-white");
+            $(".menu").delay(200).css("z-index", "0");
+
+            /*
+            $(".menu").delay(400).queue(function(next) {
+                $(this).css("z-index", "0"); 
+                next(); 
+            });
+            */
+
+            $("#showSideMenu").addClass("hidden");
+            $("#goBackToHome").removeClass("hidden");
+            $("#songName").removeClass("invisible");
+            uncheckHeart();
+        }
+
+        function bottomToTop(){
+            $(".menu").removeClass("top-to-bottom-2");
+            $(".menu").removeClass("tob-white");
+
+            // $(".menu").delay(2000).css("z-index", "-1");
+
+            /*
+            $(".menu").delay(400).queue(function(next) {
+                $(this).css("z-index", "-1"); 
+                next(); 
+            });
+            */
+
+            $("#showSideMenu").removeClass("hidden");
+            $("#goBackToHome").addClass("hidden");
+            $("#songName").addClass("invisible");
+        }
+
+        function checkHeart(){
+            $("#heartUncheck").addClass("hidden");
+            $("#heartCheck").removeClass("hidden");
+        }
+
+        function uncheckHeart(){
+            $("#heartCheck").addClass("hidden");
+            $("#heartUncheck").removeClass("hidden");
+        }
+
+        $("#heartUncheck").on("click", function(){
+            checkHeart();
+        });
+
+        $("#heartCheck").on("click", function(){
+            uncheckHeart();
+        });
+
+        // Handle Audio
+
+        var audioStatus = false;
+        var audioStatus2 = false;
+        var loopStatus = "loopOff";
+        var repeatStatus = "repeatOff";
+
+        $("#audioPlay").on("click", function(){
+            handleAudio();
+        });
+
+        $("#audioPause").on("click", function(){
+            handleAudio();
+        });
+
+        $("#audioLoop").on("click", function(){
+            loopStatus = $("#loopStatus").attr("name");
+            if(loopStatus == "loopOff"){
+                $("#audioLoop").addClass("check-bottom-opt");
+                $("#loopStatus").attr("name" , "loopOn");
+                $(".inBack").attr("data-loop" , "1");
+            } else if(loopStatus == "loopOn"){
+                $("#audioLoop").removeClass("check-bottom-opt");
+                $("#loopStatus").attr("name" , "loopOff");
+                $(".inBack").attr("data-loop" , "0");
+            }
+        });
+
+        $("#audioRepeat").on("click", function(){
+            repeatStatus = $("#repeatStatus").attr("name");
+            if(repeatStatus == "repeatOff"){
+                $("#audioRepeat").addClass("check-bottom-opt");
+                $("#repeatStatus").attr("name" , "repeatOn");
+                $(".inBack").attr("data-autoplay" , "1");
+            } else if(repeatStatus == "repeatOn"){
+                $("#audioRepeat").removeClass("check-bottom-opt");
+                $("#repeatStatus").attr("name" , "repeatOff");
+                $(".inBack").attr("data-autoplay" , "0");
+            }
+        });
+
+        $("#musicImage").on("click", function(){
+            
+            if(audioEl.paused && audioEl.currentTime > 0 && !audioEl.ended) {
+                $("#audioPlay2").click();
+            } else {
+                $("#audioPause2").click();
+            }
+            $(".music-disk-con").animate({
+                opacity: 0.2
+            }, 100).animate({
+                opacity: 1
+            }, 100);
+        });
+
+        // $("[id^='btnCircleHandle_']").on("dblclick", function(){
+        //     checkHeart();
+        // });
+
+        function handleAudio(){
+            $("#audioHandler1").removeClass("hidden");
+            $("#audioHandler2").addClass("hidden");
+            if(audioStatus == false){
+                $(".inBack").click();
+                audioStatus = true;
+                $("#audioPlay").addClass("hidden");
+                $("#audioPause").removeClass("hidden");
+            } else if(audioStatus == true){
+                $(".inBack").click();
+                audioStatus = false;
+                $("#audioPlay").removeClass("hidden");
+                $("#audioPause").addClass("hidden");
+            } else {
+
+            }
+        }
+
+        // Audio2
+
+        function playAudio() { 
+            audioEl.play(); 
+        } 
+        
+        function pauseAudio() { 
+            audioEl.pause(); 
+        } 
+
+        function handleAudio2(){
+            
+            $("#audioHandler2").removeClass("hidden");
+            $("#audioHandler1").addClass("hidden");
+
+        }
+
+        $("#audioPlay2").on("click", function(){
+            audioEl.play();
+            $("#audioPlay2").addClass("hidden");
+            $("#audioPause2").removeClass("hidden");
+
+        });
+
+        $("#audioPause2").on("click", function(){
+            pauseAudio();
+            $("#audioPlay2").removeClass("hidden");
+            $("#audioPause2").addClass("hidden");
+        });
+
+        // playMusic({songImage: '', songName: '', songArtist: '', songID: ''});
+
+        function playMusic(arg) {
+
+            $("#hideOnMusic").addClass("invisible");
+
+            $("#musicImage").css(
+                "background", "url(" + arg.songImage + ")",
+                "background-position", "center",
+                "background-repeat", "no-repeat",
+                "background-size", "cover"
+            );
+
+            $("#musicName").text(arg.songName);
+            $("#songName2").text(arg.songName);
+            $("#songName2").removeClass("invisible");
+            $("#musicArtist").text(arg.songArtist);
+
+            $("#audioElSource").attr("src", arg.songID);
+            document.getElementById("audioEl").load();
+
+            showMusic();
+            handleAudio2();
+            $("#audioPlay2").click();
+
+            $("#musicImage").animate({
+                opacity: 0.2
+            }, 600, function(){
+                $("#musicImage").animate({
+                    opacity: 1
+                }, 600, function(){
+                    $("#musicImage").animate({
+                        opacity: 0.2
+                    }, 600, function(){
+                        $("#musicImage").animate({
+                            opacity: 1
+                        }, 600 , function(){
+                            // $("#musicImage").animate({
+                            //     opacity: 0.2
+                            // }, 600 , function(){
+                            //     $("#musicImage").animate({
+                            //         opacity: 1
+                            //     }, 600 , function(){
+                            //         $("#musicImage").animate({
+                            //             opacity: 0.2
+                            //         }, 600 , function(){
+                            //             $("#musicImage").animate({
+                            //                 opacity: 1
+                            //             }, 600 , function(){
+                                            
+                            //             });
+                            //         });
+                            //     });
+                            // });
+                        });
+                    });
+                });
+            });
+
+        }
+
+        // Splash Screen
+
+        $('#zTwo').delay(800).queue(function (next) { 
+            $(this).css('transform', 'rotate(90deg)'); 
+            next(); 
+        });
+
+        $('#splashScreen').delay(1800).queue(function (next) { 
+            $(this).css(
+                "top", "-100vh"
+            ); 
+            $(this).css(
+                "opacity", "0.6"
+            );
+            next(); 
+        });
+    </script>
+</body>
+</html>
